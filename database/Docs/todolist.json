@@ -1,0 +1,163 @@
+{
+    "openapi":"3.0.3",
+    "info": {
+      "title":"To Do List API",
+      "version":"1.0",
+      "description": "OpenAPI for Todolist RESTful API",
+      "contact": {
+        "name": "Muhammad Elang Prakoso",
+        "email": "elangprakoso088@gmail.com"
+      },
+      "license": {
+        "name": "APACHE 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    },
+    "servers": [
+      {
+        "description": "Todolist RESTful API",
+        "url":"http://localhost:8000/api"
+      }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Login to app",
+                "description": "Login and get new Token"
+            }
+        },
+        "/logout":{
+            "post":{
+                "summary": "Logout from app",
+                "description": "Logout and delete token"
+            } 
+        },
+        "/task":{
+            "get":{
+                "summary": "Get All Task",
+                "description": "Get All Task User",
+                "responses": {
+                    "200": {
+                        "description": "Success Get Task"
+                    }
+                }
+            },
+            "post":{
+                "summary": "Create New Task",
+                "description": "Create New Task",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success Create Task"
+                    }
+                }
+            }
+        },
+        "/task/{taskID}":{
+            "patch":{
+                "summary": "edit field Task",
+                "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                    "type": "integer"
+                    }
+                }
+                ],
+                "description": "Edit one task with parameter ID Task",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                        "$ref": "#/components/schemas/Task"
+                    }}}
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success Edit Task"
+                    }
+                }
+            },
+            "put":{},
+            "delete":{}
+        },
+        "/category": {
+            "get":{},
+            "post":{}
+        },
+        "/category/{categoryID}":{
+            "patch":{},
+            "put":{},
+            "delete":{}
+        },
+        "/label": {
+            "get":{},
+            "post":{}
+        },
+        "/label/{labelID}": {
+            "patch":{},
+            "put":{},
+            "delete":{}
+        }
+    },
+    "components": {
+        "schemas": {
+            "User":{
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Muhammad Elang Prakoso"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "elangprakoso088@gmail"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "maggot.123"
+                    }
+                }
+            },
+            "Task":{
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Belajar Laravel"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Belajar Laravel"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "category_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "label_id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "Category":{},
+            "Label": {}
+        }
+    }
+}

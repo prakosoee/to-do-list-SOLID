@@ -160,7 +160,7 @@
             @endif
 
             <!-- Pagination Links -->
-            <div>
+            <div class="flex space-x-2">
                 {{ $tasks->appends(['search' => request('search')])->links() }}
             </div>
 
