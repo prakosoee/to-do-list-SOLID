@@ -1,163 +1,333 @@
 {
-    "openapi":"3.0.3",
+    "openapi": "3.0.3",
     "info": {
-      "title":"To Do List API",
-      "version":"1.0",
-      "description": "OpenAPI for Todolist RESTful API",
-      "contact": {
-        "name": "Muhammad Elang Prakoso",
-        "email": "elangprakoso088@gmail.com"
-      },
-      "license": {
-        "name": "APACHE 2.0",
-        "url": "https://www.apache.org/licenses/LICENSE-2.0"
-      }
+        "title": "To Do List API",
+        "version": "1.0",
+        "description": "OpenAPI for Todolist RESTful API",
+        "contact": {
+            "name": "Muhammad Elang Prakoso",
+            "email": "elangprakoso088@gmail.com"
+        },
+        "license": {
+            "name": "APACHE 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
     },
     "servers": [
-      {
-        "description": "Todolist RESTful API",
-        "url":"http://localhost:8000/api"
-      }
+        {
+            "description": "Todolist RESTful API",
+            "url": "http://localhost:8000/api"
+        }
     ],
-    "paths": {
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths":{
         "/login": {
             "post": {
                 "summary": "Login to app",
-                "description": "Login and get new Token"
-            }
-        },
-        "/logout":{
-            "post":{
-                "summary": "Logout from app",
-                "description": "Logout and delete token"
-            } 
-        },
-        "/task":{
-            "get":{
-                "summary": "Get All Task",
-                "description": "Get All Task User",
-                "responses": {
-                    "200": {
-                        "description": "Success Get Task"
-                    }
-                }
-            },
-            "post":{
-                "summary": "Create New Task",
-                "description": "Create New Task",
-                "requestBody":{
+                "description": "Login and get new Token",
+                "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Task"
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "elangprakoso088@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "maggot.123"
+                                    }
+                                },
+                                "required": ["email", "password"]
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Success Create Task"
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid credentials"
                     }
                 }
             }
         },
-        "/task/{taskID}":{
-            "patch":{
-                "summary": "edit field Task",
-                "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": {
-                    "type": "integer"
+        "/logout": {
+            "post": {
+                "summary": "Logout from app",
+                "description": "Logout and delete token",
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "Successful logout"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
-                ],
-                "description": "Edit one task with parameter ID Task",
+            }
+        },
+        "/task": {
+            "get": {
+                "summary": "Get All Task",
+                "description": "Get All Task User",
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {"description": "Success Get Task"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "post": {
+                "summary": "Create New Task",
+                "description": "Create New Task",
+                "security": [{"bearerAuth": []}],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {
-                        "$ref": "#/components/schemas/Task"
-                    }}}
+                            "schema": {"$ref": "#/components/schemas/Task"}
+                        }
+                    }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Success Edit Task"
+                    "200": {"description": "Success Create Task"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
+        },
+        "/task/{taskID}": {
+            "put": {
+                "summary": "Update Task",
+                "description": "Update Task",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "taskID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/Task"}
+                        }
                     }
+                },
+                "responses": {
+                    "200": {"description": "Success Update Task"},
+                    "401": {"description": "Unauthorized"}
                 }
             },
-            "put":{},
-            "delete":{}
-        },
-        "/category": {
-            "get":{},
-            "post":{}
-        },
-        "/category/{categoryID}":{
-            "patch":{},
-            "put":{},
-            "delete":{}
+            "delete": {
+                "summary": "Delete Task",
+                "description": "Delete Task",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "taskID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "204": {"description": "Success Delete Task"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
         },
         "/label": {
-            "get":{},
-            "post":{}
+            "get": {
+                "summary": "Get All Label",
+                "description": "Get All Label User",
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {"description": "Success Get Label"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "post": {
+                "summary": "Create New Label",
+                "description": "Create New Label",
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/Label"}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Success Create Label"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
         },
         "/label/{labelID}": {
-            "patch":{},
-            "put":{},
-            "delete":{}
+            "put": {
+                "summary": "Update Label",
+                "description": "Update Label",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "labelID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/Label"}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Success Update Label"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "delete": {
+                "summary": "Delete Label",
+                "description": "Delete Label",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "labelID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "204": {"description": "Success Delete Label"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
+        },
+        "/category": {
+            "get": {
+                "summary": "Get All Category",
+                "description": "Get All Category User",
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {"description": "Success Get Category"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "post": {
+                "summary": "Create New Category",
+                "description": "Create New Category",
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/Category"}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Success Create Category"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
+        },
+        "/category/{categoryID}": {
+            "put": {
+                "summary": "Update Category",
+                "description": "Update Category",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "categoryID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/Category"}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Success Update Category"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "delete": {
+                "summary": "Delete Category",
+                "description": "Delete Category",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "categoryID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "204": {"description": "Success Delete Category"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
         }
     },
     "components": {
         "schemas": {
-            "User":{
+            "Task": {
                 "type": "object",
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Muhammad Elang Prakoso"
-                    },
-                    "email": {
-                        "type": "string",
-                        "example": "elangprakoso088@gmail"
-                    },
-                    "password": {
-                        "type": "string",
-                        "example": "maggot.123"
-                    }
-                }
-            },
-            "Task":{
-                "type": "object",
-                "properties": {
-                    "title": {
-                        "type": "string",
-                        "example": "Belajar Laravel"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Belajar Laravel"
-                    },
+                    "title": {"type": "string", "example": "Belajar Laravel"},
+                    "description": {"type": "string", "example": "Belajar Laravel"},
                     "status": {
                         "type": "string",
+                        "enum": ["pending", "in progress", "completed"],
                         "example": "pending"
                     },
-                    "category_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "label_id": {
-                        "type": "integer",
-                        "example": 1
-                    }
+                    "category_id": {"type": "integer", "example": 1},
+                    "label_id": {"type": "integer", "example": 1}
                 }
             },
-            "Category":{},
-            "Label": {}
+            "Label":{
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "example": "Urgent"}
+                }
+            },
+            "Category":{
+                "type": "object",
+                "properties": {
+                    "name":{"type": "string", "example": "Sport"}
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
         }
     }
 }

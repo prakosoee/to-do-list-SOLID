@@ -8,11 +8,7 @@ use App\Http\Controllers\Api\LabelController;
 use App\Http\Controllers\Api\CategoryController;
 
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-// Route::post('/logout', function (Request $request) {
-//     $request->user()->currentAccessToken()->delete();
-//     return response()->json(['message' => 'Logged out']);
-// });
+Route::post('/login', [AuthenticatedSessionController::class, 'storeapi']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('task', TaskController::class);
