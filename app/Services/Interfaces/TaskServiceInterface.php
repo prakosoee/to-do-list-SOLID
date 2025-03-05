@@ -11,5 +11,5 @@ use App\Services\Interfaces\Base\AuthorizeInterface;
 
 interface TaskServiceInterface extends AuthorizeInterface, GetAllInterface, CreateInterface, UpdateInterface, DeleteInterface
 {
-
+    public function getAllTasks();
 }

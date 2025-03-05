@@ -21,10 +21,9 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $search = $request->query('search');
-        $categories = $this->categoryService->getAll($search);
+        $categories = $this->categoryService->getAll();
         return response()->json([
             'success' => true,
             'data' => $categories,

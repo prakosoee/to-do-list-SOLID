@@ -33,6 +33,12 @@ class TaskService implements TaskServiceInterface
         ")->paginate($perPage);;
     }
 
+    public function getAllTasks(): object
+    {
+        $query = Task::where('user_id', Auth::id());
+        return $query->get();
+    }
+
     public function create(array $data): Task
     {
         $task = Task::create([

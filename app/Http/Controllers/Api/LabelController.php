@@ -21,10 +21,9 @@ class LabelController extends Controller
         $this->labelService = $labelService;
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $search = $request->query('search');
-        $labels = $this->labelService->getAll($search);
+        $labels = $this->labelService->getAll();
         return response()->json([
             'success' => true,
             'data' => $labels,

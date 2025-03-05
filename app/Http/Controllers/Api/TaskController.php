@@ -29,10 +29,9 @@ class TaskController extends Controller
         $this->labelService = $labelService;
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $search = $request->query('search');
-        $tasks = $this->taskService->getAll($search);
+        $tasks = $this->taskService->getAllTasks();
         return response()->json([
             'success' => true,
             'data' => $tasks,
