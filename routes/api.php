@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Api\LabelController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
+Route::post('/register', [RegisteredUserController::class, 'registerapi']);
 
 Route::post('/login', [AuthenticatedSessionController::class, 'storeapi']);
 

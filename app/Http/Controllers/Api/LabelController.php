@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Label;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LabelRequest;
@@ -12,7 +11,7 @@ use App\Services\Interfaces\LabelServiceInterface;
 
 class LabelController extends Controller
 {
-    protected $labelService;
+    protected LabelServiceInterface $labelService;
 
     public function __construct(
         LabelServiceInterface $labelService
@@ -64,6 +63,6 @@ class LabelController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Label berhasil dihapus!',
-        ], Response::HTTP_NO_CONTENT);
+        ], Response::HTTP_OK);
     }
 }

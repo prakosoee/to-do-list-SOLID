@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\TaskRequest;
@@ -14,9 +13,9 @@ use App\Services\Interfaces\CategoryServiceInterface;
 
 class TaskController extends Controller
 {
-    protected $taskService;
-    protected $categoryService;
-    protected $labelService;
+    protected TaskServiceInterface $taskService;
+    protected CategoryServiceInterface $categoryService;
+    protected LabelServiceInterface $labelService;
 
     public function __construct(
         TaskServiceInterface $taskService,
@@ -72,6 +71,6 @@ class TaskController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Task berhasil dihapus!',
-        ], Response::HTTP_NO_CONTENT);
+        ], Response::HTTP_OK);
     }
 }

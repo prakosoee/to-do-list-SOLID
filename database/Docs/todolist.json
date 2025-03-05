@@ -25,6 +25,43 @@
         }
     ],
     "paths":{
+        "/register": {
+            "post": {
+                "summary": "Register to app",
+                "description": "Register and get new Token",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Register"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Register Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Register Success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "summary": "Login to app",
@@ -117,6 +154,21 @@
             }
         },
         "/task/{taskID}": {
+            "get": {
+                "summary": "Get Task by ID",
+                "description": "Get Task by ID",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "in": "path",
+                    "name": "taskID",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "200": {"description": "Success Get Task by ID"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
             "put": {
                 "summary": "Update Task",
                 "description": "Update Task",
@@ -131,7 +183,7 @@
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {"$ref": "#/components/schemas/Task"}
+                            "schema": {"$ref": "#/components/schemas/TaskEdit"}
                         }
                     }
                 },
@@ -151,7 +203,7 @@
                     "schema": {"type": "integer"}
                 }],
                 "responses": {
-                    "204": {"description": "Success Delete Task"},
+                    "200": {"description": "Success Delete Task"},
                     "401": {"description": "Unauthorized"}
                 }
             }
@@ -185,6 +237,21 @@
             }
         },
         "/label/{labelID}": {
+            "get": {
+                "summary": "Get Label by ID",
+                "description": "Get Label by ID",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "labelID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "200": {"description": "Success Get Label by ID"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
             "put": {
                 "summary": "Update Label",
                 "description": "Update Label",
@@ -199,7 +266,7 @@
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {"$ref": "#/components/schemas/Label"}
+                            "schema": {"$ref": "#/components/schemas/LabelEdit"}
                         }
                     }
                 },
@@ -219,7 +286,7 @@
                     "schema": {"type": "integer"}
                 }],
                 "responses": {
-                    "204": {"description": "Success Delete Label"},
+                    "200": {"description": "Success Delete Label"},
                     "401": {"description": "Unauthorized"}
                 }
             }
@@ -253,6 +320,21 @@
             }
         },
         "/category/{categoryID}": {
+            "get": {
+                "summary": "Get Category by ID",
+                "description": "Get Category by ID",
+                "security": [{"bearerAuth": []}],
+                "parameters": [{
+                    "name": "categoryID",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "integer"}
+                }],
+                "responses": {
+                    "200": {"description": "Success Get Category by ID"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
             "put": {
                 "summary": "Update Category",
                 "description": "Update Category",
@@ -267,7 +349,7 @@
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {"$ref": "#/components/schemas/Category"}
+                            "schema": {"$ref": "#/components/schemas/CategoryEdit"}
                         }
                     }
                 },
@@ -287,7 +369,7 @@
                     "schema": {"type": "integer"}
                 }],
                 "responses": {
-                    "204": {"description": "Success Delete Category"},
+                    "200": {"description": "Success Delete Category"},
                     "401": {"description": "Unauthorized"}
                 }
             }
@@ -295,11 +377,34 @@
     },
     "components": {
         "schemas": {
+            "Register": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "example": "afif"},
+                    "email": {"type": "string", "example": "afif@gmail.com"},
+                    "password": {"type": "string", "example": "afiff.123"},
+                    "password_confirmation": {"type": "string", "example": "afiff.123"}
+                }
+            },
             "Task": {
                 "type": "object",
                 "properties": {
-                    "title": {"type": "string", "example": "Belajar Laravel"},
-                    "description": {"type": "string", "example": "Belajar Laravel"},
+                    "title": {"type": "string", "example": "Belajar Laravel CRUD 5 Tabel dengan menerapkan SOLID Principles"}, 
+                    "description": {"type": "string", "example": "Belajar Laravel bisa mendapatkan income 5 Milyar per bulan"},
+                    "status": {
+                        "type": "string",
+                        "enum": ["pending", "in progress", "completed"],
+                        "example": "pending"
+                    },
+                    "category_id": {"type": "integer", "example": 1},
+                    "label_id": {"type": "integer", "example": 1}
+                }
+            },
+            "TaskEdit": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "example": "Push Rank Mobile Legend sampai mithic immortal"}, 
+                    "description": {"type": "string", "example": "Push Rank Mobile Legend sampai mithic immortal harus mabar bareng squad terus"},
                     "status": {
                         "type": "string",
                         "enum": ["pending", "in progress", "completed"],
@@ -312,13 +417,25 @@
             "Label":{
                 "type": "object",
                 "properties": {
-                    "name": {"type": "string", "example": "Urgent"}
+                    "name": {"type": "string", "example": "Urgent Buanget"}
+                }
+            },
+            "LabelEdit":{
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "example": "Gak Urgent"}
                 }
             },
             "Category":{
                 "type": "object",
                 "properties": {
-                    "name":{"type": "string", "example": "Sport"}
+                    "name":{"type": "string", "example": "E-Sport"}
+                }
+            },
+            "CategoryEdit":{
+                "type": "object",
+                "properties": {
+                    "name":{"type": "string", "example": "E-Fishing"}
                 }
             }
         },

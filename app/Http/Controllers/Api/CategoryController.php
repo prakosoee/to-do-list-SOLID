@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CategoryRequest;
@@ -12,7 +11,7 @@ use App\Services\Interfaces\CategoryServiceInterface;
 
 class CategoryController extends Controller
 {
-    protected $categoryService;
+    protected CategoryServiceInterface $categoryService;
 
     public function __construct(
         CategoryServiceInterface $categoryService
@@ -64,6 +63,6 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category berhasil dihapus!',
-        ], Response::HTTP_NO_CONTENT);
+        ], Response::HTTP_OK);
     }
 }
